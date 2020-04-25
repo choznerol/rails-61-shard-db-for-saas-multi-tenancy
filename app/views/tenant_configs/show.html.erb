@@ -1,0 +1,9 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Subdomain:</strong>
+  <%= @tenant_config.subdomain %>
+</p>
+
+<%= link_to 'Edit', edit_tenant_config_path(@tenant_config) %> |
+<%= link_to 'Back', tenant_configs_path %>

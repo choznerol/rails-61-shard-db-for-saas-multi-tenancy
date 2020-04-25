@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Tenant Configs</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Subdomain</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @tenant_configs.each do |tenant_config| %>
+      <tr>
+        <td><%= tenant_config.subdomain %></td>
+        <td><%= link_to 'Show', tenant_config %></td>
+        <td><%= link_to 'Edit', edit_tenant_config_path(tenant_config) %></td>
+        <td><%= link_to 'Destroy', tenant_config, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Tenant Config', new_tenant_config_path %>
