@@ -5,3 +5,15 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+TenantRecord::TENANT_SHARDS.each do |subdomain|
+  TenantConfig.find_or_create_by! subdomain: subdomain
+
+  ActiveRecord::Base.connected_to shard: subdomain do
+    unless User.exists? username: 'admin'
+      name = "#{subdomain}admin"
+      admin = User.new username: name, role: :admin, password: name, password_confirmation: name
+      admin.save!
+    end
+  end
+end

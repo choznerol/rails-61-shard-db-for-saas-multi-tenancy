@@ -6,22 +6,34 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   host: localhost
   port: 5432
-  username: postgres
-  password: password
+  username: <%= ENV['POSTGRES_USERNAME'] %>
+  password: <%= ENV['POSTGRES_PASSWORD'] %>
 
-development:
+# 會為每個 env 指定 1+N 個 database（1 個 admin_env、N 個 tenant_shard_#{subdomain}_#{env} ）
+# 可在 rails console 可以直接執行 Erubi 看最後的 database.yml 長怎樣：
+#
+# $ bin/rails console
+# irb(main):001:0> require 'erubi'
+# irb(main):005:0> puts eval(Erubi::Engine.new(File.read('config/database.yml')).src)
+<% %w[development test production].each do |env| %>
+<%= <<-YAML.chomp
+#{env}:
   admin:
     <<: *default
-    database: admin_development
+    database: admin_#{env}
     migrations_paths: db/admin_migrate
-  tenant_shard_hahow:
+YAML
+%>
+<% ENV.fetch('TENANTS', 'default').split(',').each do |subdomain| %>
+<%= <<-YAML.chomp
+  tenant_shard_#{subdomain}:
     <<: *default
-    database: tenant_shard_hahow_development
+    database: tenant_shard_#{subdomain}_#{env}
     migrations_paths: db/tenant_shard_migrate
-  tenant_shard_cathy:
-    <<: *default
-    database: tenant_shard_cathy_development
-    migrations_paths: db/tenant_shard_migrate
+YAML
+%>
+<% end %>
+<% end %>
 
   # Schema search path. The server defaults to $user,public
   #schema_search_path: myapp,sharedapp,public
@@ -35,19 +47,7 @@ development:
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
-test:
-  admin:
-    <<: *default
-    database: admin_test
-    migrations_paths: db/admin_migrate
-  tenant_shard_hahow:
-    <<: *default
-    database: tenant_shard_hahow_test
-    migrations_paths: db/tenant_shard_migrate
-  tenant_shard_cathy:
-    <<: *default
-    database: tenant_shard_cathy_test
-    migrations_paths: db/tenant_shard_migrate
+#test:
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -68,8 +68,16 @@ test:
 #   production:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
-production:
-  <<: *default
-  database: rails_61_shard_db_for_saas_multi_tenancy_production
-  username: rails_61_shard_db_for_saas_multi_tenancy
-  password: <%= ENV['RAILS_61_SHARD_DB_FOR_SAAS_MULTI_TENANCY_DATABASE_PASSWORD'] %>
+#production:
+#  admin:
+#    <<: *default
+#    database: admin_production
+#    migrations_paths: db/admin_migrate
+#  tenant_shard_foo:
+#    <<: *default
+#    database: tenant_shard_foo_production
+#    migrations_paths: db/tenant_shard_migrate
+#  tenant_shard_bar:
+#    <<: *default
+#    database: tenant_shard_bar_production
+#    migrations_paths: db/tenant_shard_migrate
