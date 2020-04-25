@@ -12,8 +12,8 @@
   <% end %>
 
   <div class="field">
-    <%= form.label :subdomain %>
-    <%= form.text_field :subdomain %>
+    <%= form.label :subdomain, 'subdomain（不可編輯）' %>
+    <%= form.text_field :subdomain, disabled: true %>
   </div>
 
   <div class="actions">
