@@ -9,7 +9,7 @@
 
 目前使用的 ShardConfig：
   <% if request.subdomain.present? %>
-    <code><%= TenantConfig.find_by_subdomain(request.subdomain).inspect %></code>
+    <code><%= @tenant_config.inspect %></code>
   <% else %>
     （無）
   <% end  %>
