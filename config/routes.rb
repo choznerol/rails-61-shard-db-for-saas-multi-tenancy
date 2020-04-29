@@ -1,4 +1,10 @@
+TENANT_SHARDS = ENV.fetch('TENANTS').split(',') - ['default']
+
 Rails.application.routes.draw do
+  root 'tenant_configs#index'
   resources :tenant_configs
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+
+  constraints(->(req) { TENANT_SHARDS.include? req.subdomain }) do
+    resources :users
+  end
 end

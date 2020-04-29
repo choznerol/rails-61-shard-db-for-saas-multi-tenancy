@@ -44,4 +44,14 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+
+  # http://demo.local:3000
+  # NOTE: 本地開發需要在 /etc/host 加上這兩行：
+  # 127.0.0.1    demo.local
+  # 127.0.0.1    *.demo.local
+  config.action_dispatch.tld_length = 1
+  config.hosts << 'demo.local'
+  ENV.fetch('TENANTS').split(',').each do |subdomain|
+    config.hosts << "#{subdomain}.demo.local"
+  end
 end
