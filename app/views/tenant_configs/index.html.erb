@@ -17,6 +17,7 @@
         <td><%= link_to 'Show', tenant_config %></td>
         <td><%= link_to 'Edit', edit_tenant_config_path(tenant_config) %></td>
         <td><%= link_to 'Destroy', tenant_config, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Users', users_url(subdomain: tenant_config.subdomain) %></td>
       </tr>
     <% end %>
   </tbody>
