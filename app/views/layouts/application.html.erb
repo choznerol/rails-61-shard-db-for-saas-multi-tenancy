@@ -10,6 +10,21 @@
   </head>
 
   <body>
-    <%= yield %>
+    <header>
+      <%= render partial: 'common/header' %>
+    </header>
+
+    <hr>
+
+    <main>
+      <%= yield %>
+    </main>
+
+    <hr>
+
+    <footer>
+      <%= render partial: 'common/connected_shard' %>
+    </footer>
   </body>
+
 </html>

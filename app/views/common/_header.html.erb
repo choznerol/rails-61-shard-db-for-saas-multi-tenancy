@@ -1,0 +1,5 @@
+<% home_url = tenant_configs_url(host: request.domain) %>
+
+<% unless request.url == home_url %>
+  <%= link_to '< Home (TenantConfigs)', home_url %>
+<% end %>

@@ -1,0 +1,15 @@
+目前使用的 Shard：
+  <% if request.subdomain.present? %>
+    <code><%= "tenant_shard_#{request.subdomain}" %></code>
+  <% else %>
+    （無）
+  <% end  %>
+
+  <br>
+
+目前使用的 ShardConfig：
+  <% if request.subdomain.present? %>
+    <code><%= TenantConfig.find_by_subdomain(request.subdomain).inspect %></code>
+  <% else %>
+    （無）
+  <% end  %>
